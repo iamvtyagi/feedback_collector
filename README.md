@@ -94,11 +94,39 @@ feedback_collector/
 ```
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/feedback_collector
+NODE_ENV=development
 ```
 
 ### Frontend (.env, .env.development, .env.production)
 ```
+# Development
 VITE_API_BASE_URL=http://localhost:5000
+
+# Production - leave empty to use same origin
+VITE_API_BASE_URL=
 ```
+
+## Deployment
+
+### Backend Deployment
+1. Set up a MongoDB Atlas database
+2. Deploy the server to a hosting service (Heroku, Render, etc.)
+3. Set the following environment variables:
+   - `PORT`: The port to run the server on (often set by the hosting service)
+   - `MONGODB_URI`: Your MongoDB Atlas connection string
+   - `NODE_ENV`: Set to "production"
+
+### Frontend Deployment
+1. Build the frontend:
+   ```
+   cd client
+   npm run build
+   ```
+2. Deploy the built files to a static hosting service (Vercel, Netlify, etc.)
+3. For same-origin deployment (backend and frontend on same domain):
+   - Leave `VITE_API_BASE_URL` empty in .env.production
+4. For separate deployments:
+   - Set `VITE_API_BASE_URL` to your backend URL in .env.production
+   - Add your frontend URL to the `allowedOrigins` array in the server's CORS configuration
 
 ## Built by Vansh Tyagi

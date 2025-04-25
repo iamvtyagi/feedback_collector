@@ -1,9 +1,12 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import { FeedbackContext } from "../../context/FeedbackContext";
 import Spinner from "../ui/Spinner";
+import { toast } from "react-toastify";
+import { API_BASE_URL, API_ENDPOINTS } from "../../utils/config";
 
 const FeedbackForm = () => {
-  const { submitFeedback } = useContext(FeedbackContext);
+  const { submitFeedback, testApiConnection } = useContext(FeedbackContext);
+  const [testingConnection, setTestingConnection] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -89,6 +92,26 @@ const FeedbackForm = () => {
     }
 
     return Object.keys(newErrors).length === 0;
+  };
+
+  // Test API connection
+  const handleTestConnection = async () => {
+    setTestingConnection(true);
+    try {
+      const isConnected = await testApiConnection();
+      if (isConnected) {
+        toast.success("Successfully connected to the API!");
+      } else {
+        toast.error(
+          "Could not connect to the API. Please check your network connection."
+        );
+      }
+    } catch (error) {
+      console.error("Error testing connection:", error);
+      toast.error("Error testing connection. Please try again.");
+    } finally {
+      setTestingConnection(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -298,20 +321,49 @@ const FeedbackForm = () => {
               )}
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-md font-medium transition-colors duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
-            >
-              {loading ? (
-                <>
-                  <Spinner size="sm" color="white" />
-                  <span className="ml-2">Submitting...</span>
-                </>
-              ) : (
-                "Submit Feedback"
-              )}
-            </button>
+            <div className="flex flex-col space-y-3">
+              <button
+                type="submit"
+                disabled={loading || testingConnection}
+                className="w-full py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-md font-medium transition-colors duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {loading ? (
+                  <>
+                    <Spinner size="sm" color="white" />
+                    <span className="ml-2">Submitting...</span>
+                  </>
+                ) : (
+                  "Submit Feedback"
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleTestConnection}
+                disabled={loading || testingConnection}
+                className="w-full py-2 px-4 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md font-medium transition-colors duration-300 text-sm"
+              >
+                {testingConnection ? (
+                  <>
+                    <Spinner size="sm" color="gray" />
+                    <span className="ml-2">Testing Connection...</span>
+                  </>
+                ) : (
+                  "Test API Connection"
+                )}
+              </button>
+
+              {/* Debug information */}
+              <div className="mt-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-md text-xs text-gray-500 dark:text-gray-400">
+                <p>API URL: {API_BASE_URL || "Not set"}</p>
+                <p>Submit Endpoint: {API_ENDPOINTS.SUBMIT_FEEDBACK}</p>
+                <p>
+                  Full URL:{" "}
+                  {`${API_BASE_URL || ""}${API_ENDPOINTS.SUBMIT_FEEDBACK}`}
+                </p>
+                <p>Environment: {import.meta.env.MODE}</p>
+              </div>
+            </div>
           </form>
         )}
       </div>

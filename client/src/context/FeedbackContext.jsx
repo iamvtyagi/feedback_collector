@@ -17,9 +17,14 @@ export const FeedbackProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}${API_ENDPOINTS.GET_FEEDBACKS}`
-      );
+      // Hardcoded URL as a fallback in case the config doesn't work
+      const apiUrl = `${API_BASE_URL || "http://localhost:5000"}${
+        API_ENDPOINTS.GET_FEEDBACKS
+      }`;
+      console.log("Fetching feedbacks from:", apiUrl);
+
+      // Add timeout to prevent hanging requests
+      const response = await axios.get(apiUrl, { timeout: 10000 });
 
       if (response.data.success) {
         setFeedbacks(response.data.data);
@@ -27,9 +32,19 @@ export const FeedbackProvider = ({ children }) => {
         throw new Error("Failed to fetch feedbacks");
       }
     } catch (err) {
-      setError("Failed to fetch feedbacks. Please try again.");
+      const errorMessage =
+        err.response?.data?.error ||
+        err.message ||
+        "Failed to fetch feedbacks. Please try again.";
+      setError(errorMessage);
       console.error("Error fetching feedbacks:", err);
-      toast.error("Failed to load feedback entries");
+      console.error("Error details:", {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        message: err.message,
+      });
+      toast.error(`Failed to load feedback entries: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -41,10 +56,17 @@ export const FeedbackProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}${API_ENDPOINTS.SUBMIT_FEEDBACK}`,
-        feedbackData
-      );
+      // Hardcoded URL as a fallback in case the config doesn't work
+      const apiUrl = `${API_BASE_URL || "http://localhost:5000"}${
+        API_ENDPOINTS.SUBMIT_FEEDBACK
+      }`;
+      console.log("Submitting feedback to:", apiUrl);
+      console.log("Feedback data:", feedbackData);
+
+      // Add timeout to prevent hanging requests
+      const response = await axios.post(apiUrl, feedbackData, {
+        timeout: 10000,
+      });
 
       if (response.data.success) {
         // If admin view is active, add the new feedback to the list
@@ -63,10 +85,17 @@ export const FeedbackProvider = ({ children }) => {
     } catch (err) {
       const errorMessage =
         err.response?.data?.error ||
+        err.message ||
         "Failed to submit feedback. Please try again.";
       setError(errorMessage);
       console.error("Error submitting feedback:", err);
-      toast.error(errorMessage);
+      console.error("Error details:", {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        message: err.message,
+      });
+      toast.error(`Failed to submit feedback: ${errorMessage}`);
       return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
@@ -79,7 +108,40 @@ export const FeedbackProvider = ({ children }) => {
 
     // If switching to admin view, fetch feedbacks
     if (!showAdmin) {
-      fetchFeedbacks();
+      // Test the API connection first
+      testApiConnection().then((isConnected) => {
+        if (isConnected) {
+          fetchFeedbacks();
+        } else {
+          toast.error(
+            "Could not connect to the API. Please check your network connection."
+          );
+        }
+      });
+    }
+  };
+
+  // Test API connection
+  const testApiConnection = async () => {
+    try {
+      // Try to connect to the API with a simple request
+      const apiUrl = `${API_BASE_URL || "http://localhost:5000"}`;
+      console.log("Testing API connection to:", apiUrl);
+
+      const response = await axios.get(apiUrl, {
+        timeout: 5000,
+        validateStatus: () => true, // Accept any status code
+      });
+
+      console.log("API connection test result:", {
+        status: response.status,
+        data: response.data,
+      });
+
+      return response.status < 500; // Consider any non-server error as "connected"
+    } catch (err) {
+      console.error("API connection test failed:", err);
+      return false;
     }
   };
 
@@ -93,6 +155,7 @@ export const FeedbackProvider = ({ children }) => {
         submitFeedback,
         fetchFeedbacks,
         toggleAdminView,
+        testApiConnection, // Expose the test function
       }}
     >
       {children}
