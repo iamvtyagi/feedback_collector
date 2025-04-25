@@ -21,7 +21,7 @@ app.use((req, res, next) => {
     "http://localhost:5173",
     "http://localhost:5174",
     "https://feedback-collector-inky.vercel.app",
-    "https://vicharaapka.netlify.app",
+    "https://feedbackcollecteri.netlify.app",
   ];
 
   const origin = req.headers.origin;
