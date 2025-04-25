@@ -6,7 +6,7 @@ const getApiUrl = () => {
 
   if (isProduction) {
     // In production, use your deployed API URL
-    return "https://your-production-api.com"; // This should match your actual deployed backend URL
+    return "https://feedback-collector-backend.onrender.com"; // Replace with your actual backend URL
   } else {
     // In development, use localhost
     return "http://localhost:5000";

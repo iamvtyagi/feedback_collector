@@ -15,14 +15,39 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(
-  cors({
-    origin: "*", // Allow all origins
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    // allowedHeaders: ["Content-Type", "Authorization"],
-    // credentials: true,
-  })
-);
+// Add specific CORS handling middleware
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://feedback-collector-inky.vercel.app",
+    "https://vicharaapka.netlify.app",
+  ];
+
+  const origin = req.headers.origin;
+
+  // Check if the origin is in our allowed list
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  } else {
+    // For requests without origin (like Postman)
+    res.header("Access-Control-Allow-Origin", "*");
+  }
+
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  next();
+});
 app.use(express.json());
 
 // Set up Morgan logger with custom configuration
@@ -76,3 +101,4 @@ process.on("unhandledRejection", (err) => {
   // Close server & exit process
   server.close(() => process.exit(1));
 });
+1
