@@ -1,0 +1,16 @@
+{
+  "name": "Feedback Collector",
+  "short_name": "Feedback",
+  "description": "A simple application to collect and manage user feedback",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3B82F6",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
