@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/errorHandler");
+const setupMorganLogger = require("./middleware/morganMiddleware");
 
 // Load environment variables
 dotenv.config();
@@ -17,8 +18,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Set up Morgan logger with custom configuration
+setupMorganLogger(app);
+
+// Simple middleware to log all requests
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 // Welcome route
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.json({
     message: "Welcome to the Feedback Collector API",
     endpoints: {
@@ -36,7 +46,7 @@ app.get("/feedbacks", require("./routes/feedbackRoutes").getAllFeedbacks);
 app.use(errorHandler);
 
 // Handle 404 - Route not found
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({
     success: false,
     error: "Route not found",
