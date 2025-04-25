@@ -6,8 +6,7 @@ const getApiUrl = () => {
 
   if (isProduction) {
     // In production, use your deployed API URL
-    // Replace this with your actual deployed API URL
-    return "https://your-backend-api-url.com"; // Replace with your actual backend URL
+    return "https://your-production-api.com"; // This should match your actual deployed backend URL
   } else {
     // In development, use localhost
     return "http://localhost:5000";
