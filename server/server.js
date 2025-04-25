@@ -22,14 +22,15 @@ app.get("/", (req, res) => {
   res.json({
     message: "Welcome to the Feedback Collector API",
     endpoints: {
-      submitFeedback: "POST /api/feedback",
-      getAllFeedback: "GET /api/feedback",
+      submitFeedback: "POST /submit-feedback",
+      getAllFeedback: "GET /feedbacks",
     },
   });
 });
 
 // Routes
-app.use("/api/feedback", require("./routes/feedbackRoutes"));
+app.post("/submit-feedback", require("./routes/feedbackRoutes").submitFeedback);
+app.get("/feedbacks", require("./routes/feedbackRoutes").getAllFeedbacks);
 
 // Error handling middleware
 app.use(errorHandler);

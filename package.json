@@ -1,0 +1,23 @@
+{
+  "name": "feedback-collector",
+  "version": "1.0.0",
+  "description": "Feedback Collector Application",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "install-deps": "npm install && cd server && npm install && cd ../client && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "feedback",
+    "mern",
+    "react",
+    "node",
+    "mongodb"
+  ],
+  "author": "Vansh Tyagi",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

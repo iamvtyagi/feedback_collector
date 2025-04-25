@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This is a copy of our favicon.svg to maintain compatibility -->
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="512" height="512" rx="100" fill="url(#paint0_linear)"/>
   <path d="M128 192H384M128 256H384M128 320H256" stroke="white" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>

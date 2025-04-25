@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { API_BASE_URL, API_ENDPOINTS } from "../utils/config";
 
 export const FeedbackContext = createContext();
 
@@ -16,7 +17,9 @@ export const FeedbackProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await axios.get("http://localhost:5000/api/feedback");
+      const response = await axios.get(
+        `${API_BASE_URL}${API_ENDPOINTS.GET_FEEDBACKS}`
+      );
 
       if (response.data.success) {
         setFeedbacks(response.data.data);
@@ -39,7 +42,7 @@ export const FeedbackProvider = ({ children }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/feedback",
+        `${API_BASE_URL}${API_ENDPOINTS.SUBMIT_FEEDBACK}`,
         feedbackData
       );
 

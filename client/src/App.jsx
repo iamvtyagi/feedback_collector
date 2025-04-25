@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -45,6 +45,13 @@ const AppContent = () => {
 // Router component to conditionally render form or list
 const FeedbackRouter = () => {
   const { showAdmin } = useContext(FeedbackContext);
+
+  // Update document title based on current view
+  useEffect(() => {
+    document.title = showAdmin
+      ? "Admin View | Feedback Collector"
+      : "Submit Feedback | Feedback Collector";
+  }, [showAdmin]);
 
   return <>{showAdmin ? <FeedbackList /> : <FeedbackForm />}</>;
 };

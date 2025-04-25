@@ -48,8 +48,9 @@ A single-page feedback collector application built with the MERN stack (MongoDB,
    ```
    npm run install-deps
    ```
-3. Configure MongoDB:
-   - Update the MongoDB connection string in `server/.env` if needed
+3. Configure environment variables:
+   - Backend: Update the MongoDB connection string in `server/.env` if needed
+   - Frontend: Configure API URL in `client/.env.development` and `client/.env.production`
 
 ### Running the Application
 
@@ -84,7 +85,20 @@ feedback_collector/
 
 ## API Endpoints
 
-- `POST /api/submit-feedback` - Submit new feedback
-- `GET /api/feedbacks` - Get all feedback entries
+- `POST /submit-feedback` - Submit new feedback
+- `GET /feedbacks` - Get all feedback entries
+
+## Environment Variables
+
+### Backend (.env)
+```
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/feedback_collector
+```
+
+### Frontend (.env, .env.development, .env.production)
+```
+VITE_API_BASE_URL=http://localhost:5000
+```
 
 ## Built by Vansh Tyagi
