@@ -26,8 +26,9 @@ app.use(
         "http://127.0.0.1:5173",
         "http://127.0.0.1:5174",
 
-        // Add your deployed frontend URL here
-        // For example: 'https://your-frontend-app.vercel.app'
+        // Deployed frontend URLs
+        "https://ffeedbackcollectorr.netlify.app",
+        "https://ffeedbackcollectorr.netlify.app/",
       ];
 
       // Allow requests with no origin (like mobile apps, curl, Postman)
