@@ -15,7 +15,12 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: function(origin, callback) {
+    callback(null, true); // allow all origins
+  },
+  credentials: true
+}));
 app.use(express.json());
 
 // Set up Morgan logger with custom configuration
