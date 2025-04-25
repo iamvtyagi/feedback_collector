@@ -18,7 +18,8 @@ export const FeedbackProvider = ({ children }) => {
 
     try {
       // Hardcoded URL as a fallback in case the config doesn't work
-      const apiUrl = `${API_BASE_URL || "http://localhost:5000"}${
+      console.log(`${import.meta.env.VITE_API_BASE_URL }${API_ENDPOINTS.GET_FEEDBACKS}`);
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}${
         API_ENDPOINTS.GET_FEEDBACKS
       }`;
       console.log("Fetching feedbacks from:", apiUrl);
@@ -57,7 +58,7 @@ export const FeedbackProvider = ({ children }) => {
 
     try {
       // Hardcoded URL as a fallback in case the config doesn't work
-      const apiUrl = `${API_BASE_URL || "http://localhost:5000"}${
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL }${
         API_ENDPOINTS.SUBMIT_FEEDBACK
       }`;
       console.log("Submitting feedback to:", apiUrl);
@@ -125,7 +126,7 @@ export const FeedbackProvider = ({ children }) => {
   const testApiConnection = async () => {
     try {
       // Try to connect to the API with a simple request
-      const apiUrl = `${API_BASE_URL || "http://localhost:5000"}`;
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}`;
       console.log("Testing API connection to:", apiUrl);
 
       const response = await axios.get(apiUrl, {
