@@ -18,7 +18,7 @@ export const FeedbackProvider = ({ children }) => {
 
     try {
       // Using the direct API URL from config
-      const apiUrl = `${API_BASE_URL}${API_ENDPOINTS.GET_FEEDBACKS}`;
+      const apiUrl = `https://feedback-collector-pmdf.onrender.com`;
       console.log("Fetching feedbacks from:", apiUrl);
 
       // Add timeout to prevent hanging requests
@@ -55,7 +55,7 @@ export const FeedbackProvider = ({ children }) => {
 
     try {
       // Using the direct API URL from config
-      const apiUrl = `${API_BASE_URL}${API_ENDPOINTS.SUBMIT_FEEDBACK}`;
+      const apiUrl = `https://feedback-collector-pmdf.onrender.com`;
       console.log("Submitting feedback to:", apiUrl);
       console.log("Feedback data:", feedbackData);
 
