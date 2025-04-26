@@ -1,20 +1,9 @@
 // API configuration
-// Determine the API URL based on the current environment
-const getApiUrl = () => {
-  // Check if we're in development or production
-  const isProduction = import.meta.env.PROD;
-
-  if (isProduction) {
-    // In production, use your deployed API URL
-    return "https://feedback-collector-backend.onrender.com"; // Replace with your actual backend URL
-  } else {
-    // In development, use localhost
-    return "http://localhost:5000";
-  }
-};
+// Hardcoded API base URL - directly using the production URL
+const API_URL = "https://feedback-collector-pmdf.onrender.com";
 
 // Export the API base URL
-export const API_BASE_URL = getApiUrl();
+export const API_BASE_URL = API_URL;
 
 export const API_ENDPOINTS = {
   SUBMIT_FEEDBACK: "/submit-feedback",

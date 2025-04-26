@@ -15,39 +15,46 @@ connectDB();
 const app = express();
 
 // Middleware
-// Add specific CORS handling middleware
-app.use((req, res, next) => {
-  const allowedOrigins = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "https://feedback-collector-inky.vercel.app",
-    "https://feedbackcollecteri.netlify.app",
-  ];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // List of allowed origins
+      const allowedOrigins = [
+        // Local development
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:5174",
 
-  const origin = req.headers.origin;
+        // Add your deployed frontend URL here
+        // For example: 'https://your-frontend-app.vercel.app'
+      ];
 
-  // Check if the origin is in our allowed list
-  if (allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin);
-  } else {
-    // For requests without origin (like Postman)
-    res.header("Access-Control-Allow-Origin", "*");
-  }
+      // Allow requests with no origin (like mobile apps, curl, Postman)
+      if (!origin) {
+        return callback(null, true);
+      }
 
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
+      // For development, allow all origins
+      if (process.env.NODE_ENV === "development") {
+        return callback(null, true);
+      }
 
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
-  next();
-});
+      // Check if the origin is allowed
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        console.log("CORS blocked request from:", origin);
+        // Don't send an error, just don't include the CORS headers
+        callback(null, false);
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Allow cookies
+    maxAge: 86400, // Cache preflight request for 1 day
+  })
+);
 app.use(express.json());
 
 // Set up Morgan logger with custom configuration
@@ -101,4 +108,3 @@ process.on("unhandledRejection", (err) => {
   // Close server & exit process
   server.close(() => process.exit(1));
 });
-1

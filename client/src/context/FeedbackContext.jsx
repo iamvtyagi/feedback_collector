@@ -17,11 +17,8 @@ export const FeedbackProvider = ({ children }) => {
     setError(null);
 
     try {
-      // Hardcoded URL as a fallback in case the config doesn't work
-      console.log(`${import.meta.env.VITE_API_BASE_URL }${API_ENDPOINTS.GET_FEEDBACKS}`);
-      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}${
-        API_ENDPOINTS.GET_FEEDBACKS
-      }`;
+      // Using the direct API URL from config
+      const apiUrl = `${API_BASE_URL}${API_ENDPOINTS.GET_FEEDBACKS}`;
       console.log("Fetching feedbacks from:", apiUrl);
 
       // Add timeout to prevent hanging requests
@@ -57,10 +54,8 @@ export const FeedbackProvider = ({ children }) => {
     setError(null);
 
     try {
-      // Hardcoded URL as a fallback in case the config doesn't work
-      const apiUrl = `${import.meta.env.VITE_API_BASE_URL }${
-        API_ENDPOINTS.SUBMIT_FEEDBACK
-      }`;
+      // Using the direct API URL from config
+      const apiUrl = `${API_BASE_URL}${API_ENDPOINTS.SUBMIT_FEEDBACK}`;
       console.log("Submitting feedback to:", apiUrl);
       console.log("Feedback data:", feedbackData);
 
@@ -126,7 +121,7 @@ export const FeedbackProvider = ({ children }) => {
   const testApiConnection = async () => {
     try {
       // Try to connect to the API with a simple request
-      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}`;
+      const apiUrl = API_BASE_URL;
       console.log("Testing API connection to:", apiUrl);
 
       const response = await axios.get(apiUrl, {
